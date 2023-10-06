@@ -29,6 +29,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: userapi/package-lock.json
 
+      - name: Install nmp
+        run: npm install
+
       - name: Install dependencies
         run: npm ci
 
