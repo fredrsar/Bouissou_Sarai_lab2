@@ -8,7 +8,7 @@ describe('User', () => {
     // Clean DB before each test
     db.flushdb()
   })
-
+  
   describe('Create', () => {
 
     it('create a new user', (done) => {
@@ -36,37 +36,53 @@ describe('User', () => {
       })
     })
 
-    // TODO: Check if this is correct 
     it('avoid creating an existing user', (done)=> {
       const user = {
         username: 'sergkudinov',
         firstname: 'Sergei',
         lastname: 'Kudinov'
       }
-      userController.create(user, (err, result) => {
+      // Create a user
+      userController.create(user, () => {
+        // Create the same user again
+        userController.create(user, (err, result) => {
+          expect(err).to.not.be.equal(null)
+          expect(result).to.be.equal(null)
+          done()
+        })
+      })
+    })
+  })
+
+  describe('Get', ()=> {
+
+    it('get a user by username', (done) => {
+      const user = {
+        username: 'sergkudinov',
+        firstname: 'Sergei',
+        lastname: 'Kudinov'
+      }
+      // Create a user
+      userController.create(user, () => {
+        // Get an existing user
+        userController.get(user.username, (err, result) => {
+          expect(err).to.be.equal(null)
+          expect(result).to.be.deep.equal({
+            firstname: 'Sergei',
+            lastname: 'Kudinov'
+          })
+          done()
+        })
+      })
+    })
+  
+    it('can not get a user when it does not exist', (done) => {
+      userController.get('invalid', (err, result) => {
         expect(err).to.not.be.equal(null)
         expect(result).to.be.equal(null)
         done()
-       })
-  })
-
-  //TODO: Create test for the get method
-  describe('Get', () => {
-    it('get a user by username', (done) => {
-    // 1. First, create a user to make this unit test independent from the others
-      const user = {
-        username: 'nicolasbouissou',
-        firstname: 'Nicolas', 
-        lastname: 'Bouissou'
-      }
-  //     // 2. Then, check if the result of the get method is correct
-  //     done()
-  //   })
-  //
-  //   it('cannot get a user when it does not exist', (done) => {
-  //     // Check with any invalid user
-  //     done()
+      })
     })
-   })
+  
   })
 })
