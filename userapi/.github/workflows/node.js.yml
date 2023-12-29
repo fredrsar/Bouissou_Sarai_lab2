@@ -25,5 +25,5 @@ jobs:
     - run: rm package-lock.json
     - run: npm install
     - run: npm run build --if-present
-    - run: npm userapi/test
+    - run: npm test
     
