@@ -24,6 +24,10 @@ jobs:
         cache: 'npm'
     - run: rm package-lock.json
     - run: npm install
+
+
+    - name: Set up Redis
+      uses: appleboy/setup-redis@v1
+
     - run: npm run build --if-present
     - run: npm test
-    
